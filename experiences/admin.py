@@ -11,6 +11,7 @@ class ExperienceAdmin(admin.ModelAdmin):
         "city",
         "host",
         "price",
+        "category",
         "start",
         "end",
     )
@@ -20,6 +21,7 @@ class ExperienceAdmin(admin.ModelAdmin):
         "city",
         "host",
         "price",
+        "category",
     )
 
 

@@ -1,3 +1,4 @@
+from email.policy import default
 from django.db import models
 from common.models import CommonModel
 
@@ -36,6 +37,15 @@ class Room(CommonModel):
     owner = models.ForeignKey(
         "users.User",
         on_delete=models.CASCADE,
+    )
+    amenities = models.ManyToManyField(
+        "rooms.Amenity",
+    )
+    category = models.ForeignKey(
+        "categories.Category",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
     )
 
     def __str__(self) -> str:
