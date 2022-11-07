@@ -6,15 +6,15 @@ from .models import Room, Amenity
 class RoomAdmin(admin.ModelAdmin):
 
     list_display = (
-        "description",
+        "name",
         "country",
         "city",
         "price",
         "pet_friendly",
         "kind",
         "owner",
+        "total_amenities",
         "created_at",
-        "updated_at",
     )
 
     list_filter = (

@@ -7,14 +7,7 @@ class ReviewAdmin(admin.ModelAdmin):
 
     list_display = (
         "__str__",
-        "user",
-        "created_at",
-        "updated_at",
+        "review",
     )
 
-    list_filter = (
-        "user",
-        "room",
-        "experience",
-        "rating",
-    )
+    list_filter = ("rating",)
