@@ -24,7 +24,7 @@ class Perks(APIView):
             return Response(serializer.errors)
 
 
-class PerksDetail(APIView):
+class PerkDetail(APIView):
     def get_object(self, pk):
         try:
             return Perk.objects.get(pk=pk)
