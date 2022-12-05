@@ -191,3 +191,27 @@ class RoomReviews(APIView):
             many=True,
         )
         return Response(serializers.data)
+
+
+class RoomAmenities(APIView):
+    def get_object(self, pk):
+        try:
+            return Room.objects.get(pk=pk)
+        except Room.DoesNotExist:
+            return NotFound
+
+    def get(self, request, pk):
+        try:
+            page = request.query_params.get("page", 1)
+            page = int(page)
+        except ValueError:
+            page = 1
+        page_size = 3
+        start = (page - 1) * page_size
+        end = start + page_size
+        room = self.get_object(pk)
+        serializers = AmenitySerializer(
+            room.amenities.all()[start:end],
+            many=True,
+        )
+        return Response(serializers.data)
