@@ -13,6 +13,8 @@ from .serializers import AmenitySerializer, RoomDetailSerializer, RoomListSerial
 from .models import Amenity, Room
 from reviews.models import Review
 from reviews.serializers import ReviewSerializer
+from medias.serializers import PhotoSerializer
+from django.conf import settings
 
 
 class Rooms(APIView):
@@ -182,7 +184,7 @@ class RoomReviews(APIView):
             page = int(page)
         except ValueError:
             page = 1
-        page_size = 3
+        page_size = settings.PAGE_SIZE
         start = (page - 1) * page_size
         end = start + page_size
         room = self.get_object(pk)
@@ -206,7 +208,7 @@ class RoomAmenities(APIView):
             page = int(page)
         except ValueError:
             page = 1
-        page_size = 3
+        page_size = settings.PAGE_SIZE
         start = (page - 1) * page_size
         end = start + page_size
         room = self.get_object(pk)
@@ -215,3 +217,24 @@ class RoomAmenities(APIView):
             many=True,
         )
         return Response(serializers.data)
+
+
+class RoomPhotos(APIView):
+    def get_object(self, pk):
+        try:
+            return Room.objects.get(pk=pk)
+        except Room.DoesNotExist:
+            raise NotFound
+
+    def post(self, request, pk):
+        room = self.get_object(pk)
+        if not request.user.is_authenticated:
+            raise NotAuthenticated
+        if request.user != room.owner:
+            raise PermissionDenied
+        serializer = PhotoSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save(room=room)
+            return Response(serializer.data)
+        else:
+            return Response(serializer.errors)
